@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://polly-wiki.example.org/sitemap.xml
+Sitemap: https://dendenov.github.io/polly-wiki/sitemap.xml
