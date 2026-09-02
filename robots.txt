@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://polly-wiki.example.org/sitemap.xml
