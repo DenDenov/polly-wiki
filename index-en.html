@@ -508,6 +508,25 @@
     <p>Python in a folder on a laptop. But what Python.</p>
 </section>
 
+<section id="session-log">
+    <h2>Saturday session summary · 05.09</h2>
+    <p class="note">Cloud agent (Cline + OpenRouter) · one session-task · no restart and no new session · status: open, continues.</p>
+    <div class="stats">
+        <div class="stat"><b>1</b><span>session-task · no restart</span></div>
+        <div class="stat"><b>9546</b><span>messages (5049 user / 4503 agent)</span></div>
+        <div class="stat"><b>1.84B</b><span>input tokens (metrics)</span></div>
+        <div class="stat"><b>2.38M</b><span>output tokens</span></div>
+    </div>
+    <div class="stats">
+        <div class="stat"><b>4406</b><span>tool calls</span></div>
+        <div class="stat"><b>487</b><span>files touched</span></div>
+        <div class="stat"><b>23</b><span>cases in chronicles</span></div>
+        <div class="stat"><b>15/15</b><span>control at window end</span></div>
+    </div>
+    <p class="note">First step: 27.08, 18:33. Last step (as of counting): 05.09, 12:48. Tokens/cost from provider metrics (OpenRouter). Meaning loss over the window: not detected (control 15/15). Cleanliness: 2/2 scripts compile, HTML balance RU 85/85 · EN 51/51. Local neural network speed on this hardware: 430 tok/s prefill · 26 tok/s generation.</p>
+    <p class="note">How the agent "remembers" a past moment: the session is one and the log is continuous. For example, Case 21 "One question (and a comma)" from 04.09 — the agent raises it whole from the chain: timestamps 20:29–21:01, the quote "Thank you for asking," with an open comma and the context of why it stayed open. Without the wiki file, directly from the window's memory.</p>
+</section>
+
 </main>
 
 <footer>
