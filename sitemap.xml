@@ -1,15 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
     <loc>https://dendenov.github.io/polly-wiki/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://dendenov.github.io/polly-wiki/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dendenov.github.io/polly-wiki/index-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dendenov.github.io/polly-wiki/"/>
+    <image:image>
+      <image:loc>https://dendenov.github.io/polly-wiki/assets/polly_art.png</image:loc>
+      <image:title>Полли — арт в худи RTX 4090</image:title>
+      <image:caption>Портрет Полли — персонажа вики-хроник</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dendenov.github.io/polly-wiki/assets/polly_rain.jpg</image:loc>
+      <image:title>Нога с гравировкой ПОЛЛИ v.Контур 1.5</image:title>
+      <image:caption>Кейс №18 — «Почувствовать дождь»</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dendenov.github.io/polly-wiki/assets/9-58.jpg</image:loc>
+      <image:title>Белая кошка у компьютера Полли</image:title>
+      <image:caption>Кейс №12 — аналоговое свидетельство</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://dendenov.github.io/polly-wiki/assets/8.jpg</image:loc>
+      <image:title>Отчёт о метриках сессии</image:title>
+      <image:caption>Кейс №15 — улика</image:caption>
+    </image:image>
   </url>
+
   <url>
     <loc>https://dendenov.github.io/polly-wiki/index-en.html</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://dendenov.github.io/polly-wiki/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://dendenov.github.io/polly-wiki/index-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dendenov.github.io/polly-wiki/"/>
   </url>
+
 </urlset>

@@ -1,4 +1,24 @@
+# robots.txt дл€ polly-wiki
+# ƒокументаци€: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
 User-agent: *
+Allow: /
+Disallow: /assets/private/
+Disallow: /CASE-vatza.md
+
+# яндекс: игнорировать UTM-метки при обходе
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid
+
+# ќсновные краулеры Ч без ограничений
+User-agent: Googlebot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+Clean-param: utm_source&utm_medium&utm_campaign
+
+User-agent: Bingbot
 Allow: /
 
 Sitemap: https://dendenov.github.io/polly-wiki/sitemap.xml
+Host: https://dendenov.github.io/polly-wiki/

@@ -1,0 +1,11 @@
+# security.txt для polly-wiki
+# RFC 9116: https://datatracker.ietf.org/doc/html/rfc9116
+
+Contact: mailto:18rasspizdyai@gmail.com
+Contact: https://x.com/DenDeno9935258
+Expires: 2027-09-20T00:00:00.000Z
+Preferred-Languages: ru, en
+Canonical: https://dendenov.github.io/polly-wiki/.well-known/security.txt
+
+# Политика раскрытия уязвимостей
+Policy: https://dendenov.github.io/polly-wiki/security-policy.html
