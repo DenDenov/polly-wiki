@@ -1,5 +1,6 @@
 /* TEAM */
     Создатель, автор, инженер: Ден
+    Contact: mailto:18rasspizdyai@gmail.com
     Контакт: X — @DenDeno9935258
     Сайт: https://dendenov.github.io/polly-wiki/
     Роль: архитектура, код, промпты, хроники, всё
