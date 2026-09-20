@@ -1,15 +1,15 @@
-# robots.txt для polly-wiki
-# Документация: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+# robots.txt РґР»СЏ polly-wiki
+# Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ: https://developers.google.com/search/docs/crawling-indexing/robots/intro
 
 User-agent: *
 Allow: /
 Disallow: /assets/private/
 Disallow: /CASE-vatza.md
 
-# Яндекс: игнорировать UTM-метки при обходе
+# РЇРЅРґРµРєСЃ: РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊ UTM-РјРµС‚РєРё РїСЂРё РѕР±С…РѕРґРµ
 Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid
 
-# Основные краулеры — без ограничений
+# РћСЃРЅРѕРІРЅС‹Рµ РєСЂР°СѓР»РµСЂС‹ вЂ” Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёР№
 User-agent: Googlebot
 Allow: /
 
