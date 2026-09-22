@@ -19,8 +19,8 @@ const ctx = canvas.getContext('2d', { alpha: false });
 // ─── Конфиг ────────────────────────────────────────────────────────────────
 const GLYPH_TEXT   = 'ポリー';
 const GLYPH_FONT   = "'Yu Gothic', 'Meiryo', 'MS Gothic', 'Noto Sans JP', sans-serif";
-const GLYPH_MAX_H  = 0.90;
-const GLYPH_PAD_X  = 0.06;
+const GLYPH_MAX_H  = 0.98;
+const GLYPH_PAD_X  = 0.01;
 
 const MASK_H     = 512;
 const TARGET_FPS = 30;
@@ -136,7 +136,7 @@ function buildGlyphMask() {
 
     const chars = Array.from(GLYPH_TEXT);
     const cellH = off.height / chars.length;
-    const fontSize = Math.floor(cellH * 0.82);
+    const fontSize = Math.floor(cellH * 0.98);
 
     octx.fillStyle = '#ffffff';
     octx.font = `bold ${fontSize}px ${GLYPH_FONT}`;
@@ -267,7 +267,7 @@ function draw() {
                 const ch = glitchChars[idx];
 
                 const wave = Math.sin(t * 2 + cx * 0.2 + cy * 0.15);
-                const alpha = 0.10 + 0.12 * (wave * 0.5 + 0.5);
+                const alpha = 0.40 + 0.35 * (wave * 0.5 + 0.5);
 
                 ctx.fillStyle = 'rgba(0, 179, 255, ' + alpha.toFixed(3) + ')';
                 ctx.fillText(ch, x, py);
