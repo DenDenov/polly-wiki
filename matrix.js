@@ -267,9 +267,9 @@ function draw() {
                 const ch = glitchChars[idx];
 
                 const wave = Math.sin(t * 2 + cx * 0.2 + cy * 0.15);
-                const alpha = 0.40 + 0.35 * (wave * 0.5 + 0.5);
+                const alpha = 0.80 + 0.20 * (wave * 0.5 + 0.5);
 
-                ctx.fillStyle = 'rgba(0, 1, 2, ' + alpha.toFixed(3) + ')';
+                ctx.fillStyle = 'rgba(0, 204, 255, ' + alpha.toFixed(3) + ')';
                 ctx.fillText(ch, x, py);
             }
         }
