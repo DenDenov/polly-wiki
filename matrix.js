@@ -179,7 +179,10 @@ function computeMaskRect() {
     const availW = visibleRight * (1 - pad * 2);
     const availH = cssH * (1 - pad * 2);
 
-    const scale = Math.min(availW / maskW, availH / maskH);
+    // Ограничиваем маску по ширине — иначе на широком мониторе
+    // она растягивается почти на всю полосу и давит дождь.
+    const capWidth = visibleRight * 0.45;
+    const scale = Math.min(availW / maskW, availH / maskH, capWidth / maskW);
     const w = maskW * scale;
     const h = maskH * scale;
 
