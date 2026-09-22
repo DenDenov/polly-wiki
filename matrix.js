@@ -262,7 +262,7 @@ if (glyphReady) {
 
         // Скорость потока в ячейках/сек. Можно варьировать по колонкам.
         // +cx*3 — сдвиг фазы между колонками, чтобы не было «рядов».
-        const flow = t * 6 + cx * 3;
+        const flow = t * 2 + cx * 3;
 
         for (let cy = by0; cy < by1; cy++) {
             const py = cy * CELL_SIZE + CELL_SIZE * 0.5;
@@ -283,9 +283,9 @@ if (glyphReady) {
             // Голова струи (idx === len-1) — самая яркая, хвост затухает.
             const progress = len > 1 ? idx / (len - 1) : 1;
             if (idx === len - 1) {
-                ctx.fillStyle = '#66eaff';
+                ctx.fillStyle = '#00b3ff';
             } else {
-                ctx.fillStyle = 'rgba(51, 229, 255, ' + (0.35 + progress * 0.55).toFixed(3) + ')';
+                ctx.fillStyle = 'rgba(0, 179, 255, ' + (progress * 0.66).toFixed(3) + ')';
             }
             ctx.fillText(ch, x, py);
         }
