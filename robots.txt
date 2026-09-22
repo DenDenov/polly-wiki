@@ -1,10 +1,19 @@
 # robots.txt для polly-wiki
 # Документация: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+#
+# ВАЖНО: краулеры читают robots.txt только из корня хоста —
+# https://dendenov.github.io/robots.txt. Этот файл применяется,
+# когда сайт развёрнут в корне домена; иначе он служит справочником правил.
 
 User-agent: *
 Allow: /
-Disallow: /assets/private/
+# черновик кейса выложен отдельным .md — индексировать не нужно
 Disallow: /CASE-vatza.md
+# служебное: сборка и шаблоны локализации (дают дубли страниц)
+Disallow: /build.py
+Disallow: /i18n/
+# защитный запрет под будущие приватные ассеты (каталога сейчас нет)
+Disallow: /assets/private/
 
 # Яндекс: игнорировать UTM-метки при обходе
 Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid
@@ -21,4 +30,5 @@ User-agent: Bingbot
 Allow: /
 
 Sitemap: https://dendenov.github.io/polly-wiki/sitemap.xml
+# директиву Host Яндекс не использует с 2018 года — оставлена для совместимости
 Host: https://dendenov.github.io/polly-wiki/

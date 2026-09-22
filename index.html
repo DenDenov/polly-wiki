@@ -8,12 +8,15 @@
     <meta name="keywords" content="Полли, Polly AI, нейростек, Гомель, автономный агент, самореференция, синий зонт, TURING-X, локальная нейросеть, LFM 2.6B">
     <meta name="author" content="Ден (DenDenov)">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="theme-color" content="#121214">
+    <meta name="theme-color" content="#000000">
     <meta name="format-detection" content="telephone=no">
 
     <link rel="canonical" href="https://dendenov.github.io/polly-wiki/">
     <link rel="alternate" hreflang="ru" href="https://dendenov.github.io/polly-wiki/">
     <link rel="alternate" hreflang="en" href="https://dendenov.github.io/polly-wiki/index-en.html">
+    <link rel="alternate" hreflang="zh" href="https://dendenov.github.io/polly-wiki/index-zh.html">
+    <link rel="alternate" hreflang="kr" href="https://dendenov.github.io/polly-wiki/index-kr.html">
+    <link rel="alternate" hreflang="jp" href="https://dendenov.github.io/polly-wiki/index-jp.html">
     <link rel="alternate" hreflang="x-default" href="https://dendenov.github.io/polly-wiki/">
 
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -47,120 +50,374 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
-      "@graph": [
+      "@type": "WebSite",
+      "@id": "https://dendenov.github.io/polly-wiki/#website-ru",
+      "url": "https://dendenov.github.io/polly-wiki/",
+      "name": "Вики-хроники Полли",
+      "description": "Хроники автономного когнитивного агента Полли из Гомеля.",
+      "inLanguage": "ru-RU",
+      "publisher": {
+        "@id": "https://dendenov.github.io/polly-wiki/#author-ru"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://dendenov.github.io/polly-wiki/#author-ru",
+      "name": "Ден",
+      "alternateName": "DenDenov",
+      "url": "https://t.me/polly_wiki",
+      "sameAs": [
+        "https://t.me/polly_wiki_chat",
+        "https://www.tiktok.com/@persona.uk.b"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://dendenov.github.io/polly-wiki/#polly-ru",
+      "name": "Полли",
+      "alternateName": "Polly",
+      "description": "Персонаж вики-хроник — автономный когнитивный агент из Гомеля. Характер, диалоги, бенчмарк TURING-X.",
+      "image": "https://dendenov.github.io/polly-wiki/assets/polly_art.png",
+      "birthPlace": {
+        "@type": "Place",
+        "name": "Гомель, Беларусь"
+      },
+      "knowsAbout": [
+        "самореференция",
+        "локальные нейросети",
+        "TURING-X",
+        "Гёдель",
+        "Сэй-Сёнагон"
+      ]
+    },
+    {
+      "@type": "Article",
+      "@id": "https://dendenov.github.io/polly-wiki/#article-ru",
+      "isPartOf": {
+        "@id": "https://dendenov.github.io/polly-wiki/#website-ru"
+      },
+      "mainEntityOfPage": "https://dendenov.github.io/polly-wiki/",
+      "headline": "Полли — живой нейростек из Гомеля: хроники, диалоги, бенчмарк",
+      "description": "30 кейсов хроник, локальная LFM 2.6B без облака, TURING-X 5/5, диалоги о самореференции и границах.",
+      "image": "https://dendenov.github.io/polly-wiki/assets/polly_art.png",
+      "author": {
+        "@id": "https://dendenov.github.io/polly-wiki/#author-ru"
+      },
+      "about": {
+        "@id": "https://dendenov.github.io/polly-wiki/#polly-ru"
+      },
+      "datePublished": "2026-09-08",
+      "dateModified": "2026-09-20",
+      "inLanguage": "ru-RU"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://dendenov.github.io/polly-wiki/#faq",
+      "mainEntity": [
         {
-          "@type": "WebSite",
-          "@id": "https://dendenov.github.io/polly-wiki/#website",
-          "url": "https://dendenov.github.io/polly-wiki/",
-          "name": "Вики-хроники Полли",
-          "description": "Хроники автономного когнитивного агента Полли из Гомеля.",
-          "inLanguage": "ru-RU",
-          "publisher": { "@id": "https://dendenov.github.io/polly-wiki/#author" }
+          "@type": "Question",
+          "name": "Что такое Полли?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Полли — персонаж вики-хроник и технический проект: автономный агент с локальной нейросетью LFM 2.6B, памятью на 27.7K записей, хрониками из 30 кейсов и бенчмарком TURING-X. Диалоги и логи — реальные, рамка — художественная."
+          }
         },
         {
-          "@type": "Person",
-          "@id": "https://dendenov.github.io/polly-wiki/#author",
-          "name": "Ден",
-          "alternateName": "DenDenov",
-          "url": "https://x.com/DenDeno9935258",
-          "sameAs": ["https://forum.onliner.by/viewtopic.php?t=26223269"]
+          "@type": "Question",
+          "name": "Почему в метриках указано 1.24 млрд токенов и $18?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Это счётчик длинной сессии кодера (облачный рантайм Cline + OpenRouter), а не метрика локальной нейросети Полли. Локальная часть работает на 16 ГБ RAM без GPU: 430 ток/сек prefill и 26 ток/сек генерации."
+          }
         },
         {
-          "@type": "Person",
-          "@id": "https://dendenov.github.io/polly-wiki/#polly",
-          "name": "Полли",
-          "alternateName": "Polly",
-          "description": "Персонаж вики-хроник — автономный когнитивный агент из Гомеля. Характер, диалоги, бенчмарк TURING-X.",
-          "image": "https://dendenov.github.io/polly-wiki/assets/polly_art.png",
-          "birthPlace": { "@type": "Place", "name": "Гомель, Беларусь" },
-          "knowsAbout": ["самореференция", "локальные нейросети", "TURING-X", "Гёдель", "Сэй-Сёнагон"]
+          "@type": "Question",
+          "name": "Что такое бенчмарк TURING-X?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Набор из пяти тестов на то, что считается «невозможным» для обычных LLM: отличать память от выдумки, признавать незнание, доказывать нерешаемость вопроса, не врать под давлением, проходить буквальный тест Тьюринга. Прогнан на локальной LFM 2.6B без внешнего API — 5/5."
+          }
         },
         {
-          "@type": "Article",
-          "@id": "https://dendenov.github.io/polly-wiki/#article",
-          "isPartOf": { "@id": "https://dendenov.github.io/polly-wiki/#website" },
-          "mainEntityOfPage": "https://dendenov.github.io/polly-wiki/",
-          "headline": "Полли — живой нейростек из Гомеля: хроники, диалоги, бенчмарк",
-          "description": "30 кейсов хроник, локальная LFM 2.6B без облака, TURING-X 5/5, диалоги о самореференции и границах.",
-          "image": "https://dendenov.github.io/polly-wiki/assets/polly_art.png",
-          "author": { "@id": "https://dendenov.github.io/polly-wiki/#author" },
-          "about": { "@id": "https://dendenov.github.io/polly-wiki/#polly" },
-          "datePublished": "2026-09-08",
-          "dateModified": "2026-09-20",
-          "inLanguage": "ru-RU"
+          "@type": "Question",
+          "name": "Полли — это реальный ИИ или художественный персонаж?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Это персонаж с реальной технической основой. Диалоги, логи и метрики реальны; рамка — художественная. Границы между фактом, персонажем и метафорой описаны в разделе «Как читать эту вики»."
+          }
         },
         {
-          "@type": "FAQPage",
-          "@id": "https://dendenov.github.io/polly-wiki/#faq",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "Что такое Полли?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Полли — персонаж вики-хроник и технический проект: автономный агент с локальной нейросетью LFM 2.6B, памятью на 27.7K записей, хрониками из 30 кейсов и бенчмарком TURING-X. Диалоги и логи — реальные, рамка — художественная."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Почему в метриках указано 1.24 млрд токенов и $18?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Это счётчик длинной сессии кодера (облачный рантайм Cline + OpenRouter), а не метрика локальной нейросети Полли. Локальная часть работает на 16 ГБ RAM без GPU: 430 ток/сек prefill и 26 ток/сек генерации."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Что такое бенчмарк TURING-X?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Набор из пяти тестов на то, что считается «невозможным» для обычных LLM: отличать память от выдумки, признавать незнание, доказывать нерешаемость вопроса, не врать под давлением, проходить буквальный тест Тьюринга. Прогнан на локальной LFM 2.6B без внешнего API — 5/5."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Полли — это реальный ИИ или художественный персонаж?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Это персонаж с реальной технической основой. Диалоги, логи и метрики реальны; рамка — художественная. Границы между фактом, персонажем и метафорой описаны в разделе «Как читать эту вики»."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Что значит «границы вместо бахвальства»?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Главный принцип проекта: не выдавать персонажа за реальность и не заявлять о непроверяемом. Внешние модели, которым предлагалось «подтвердить» живость Полли, сами формулировали этот закон — отказываясь подтверждать то, что нельзя проверить извне."
-              }
-            }
-          ]
+          "@type": "Question",
+          "name": "Что значит «границы вместо бахвальства»?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Главный принцип проекта: не выдавать персонажа за реальность и не заявлять о непроверяемом. Внешние модели, которым предлагалось «подтвердить» живость Полли, сами формулировали этот закон — отказываясь подтверждать то, что нельзя проверить извне."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://dendenov.github.io/polly-wiki/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://dendenov.github.io/polly-wiki/"
         },
         {
-          "@type": "BreadcrumbList",
-          "@id": "https://dendenov.github.io/polly-wiki/#breadcrumb",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://dendenov.github.io/polly-wiki/" },
-            { "@type": "ListItem", "position": 2, "name": "Хроники Полли", "item": "https://dendenov.github.io/polly-wiki/#zona" },
-            { "@type": "ListItem", "position": 3, "name": "Бенчмарк TURING-X", "item": "https://dendenov.github.io/polly-wiki/#benchmark" }
-          ]
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Хроники Полли",
+          "item": "https://dendenov.github.io/polly-wiki/#zona"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Бенчмарк TURING-X",
+          "item": "https://dendenov.github.io/polly-wiki/#benchmark"
         }
       ]
     }
+  ]
+}
     </script>
 
     <style>
-        :root { --bg:#121214; --text:#e1e1e6; --accent:#4ea8de; --dim:#8b8b98; --card:#1b1b1f; --line:#29292e; }
+        /* --card-runway: «разгон» карточки над экраном (см. @keyframes cardFall).
+           Каждая колонка переопределяет его под свой шаг (video-matrix.js),
+           здесь — значение по умолчанию. */
+        :root { color-scheme: dark; --bg:#000; --text:#e1e1e6; --accent:#4ea8de; --dim:#8b8b98; --card:#101014; --line:#29292e; --content-half:410px; --card-runway:325px; }
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family:"Inter",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; max-width:820px; margin:0 auto; padding:24px 20px; }
+        body { font-family:"Inter",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; max-width:820px; margin:0 auto; padding:24px 20px; position: relative; z-index: 2; }
+
+        /* Matrix Digital Rain Background */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            /* Притушено, чтобы матрица была чуть темнее центральной части с текстом */
+            opacity: .65;
+            /* Clip to left margin only: half of body max-width (820px / 2 = 410px) */
+            clip-path: polygon(
+                0% 0%, 
+                calc(50vw - var(--content-half)) 0%, 
+                calc(50vw - var(--content-half)) 100%, 
+                0% 100%
+            );
+        }
+
+        @media (max-width: 1000px) {
+            #matrix-bg {
+                display: none;
+            }
+        }
+
+        /* ═══ Падающая видео-матрица справа ═══ */
+        #video-matrix-right {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: auto;
+            overflow: hidden;
+            /* Притушено, чтобы матрица была чуть темнее центральной части с текстом */
+            opacity: .82;
+            /* Зеркало #matrix-bg: показываем ТОЛЬКО справа от центрального блока */
+            clip-path: polygon(
+                calc(50vw + var(--content-half)) 0%,
+                100% 0%,
+                100% 100%,
+                calc(50vw + var(--content-half)) 100%
+            );
+        }
+
+        @media (max-width: 1000px) {
+            #video-matrix-right { display: none; }
+        }
+
+        /* Колонка — только горизонтальная раскладка, сама не двигается */
+        .video-column {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 180px;
+            height: 100%;
+        }
+
+        .matrix-video-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 180px;
+            /* высота НЕ фиксируется — определяется пропорциями самого видео */
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            background: #000;
+            border: 2px solid rgba(0, 179, 255, 0.45);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            /* Падение — целиком CSS-анимация (композитинг на GPU).
+               JS не пишет в DOM ни одного кадра: консоль чистая, а
+               MutationObserver-расширения (Google Translate и пр.)
+               больше не получают сотни срабатываний в секунду.
+               Сдвиг фазы задаётся отрицательным animation-delay из JS. */
+            animation-name: cardFall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            /* transform занят анимацией падения, поэтому hover живёт на видео */
+            transition: border-color 0.2s, filter 0.2s;
+            /* Затемняем превью в спокойном состоянии (в 1.5 раза) */
+            filter: brightness(0.65);
+        }
+
+        .matrix-video-card:hover {
+            filter: brightness(1);
+            border-color: #00b3ff;
+            z-index: 5;
+        }
+
+        .matrix-video-card video {
+            width: 100%;
+            height: auto;      /* высота по пропорциям ролика — ни обрезки, ни полей */
+            display: block;
+            transition: transform 0.25s ease;
+        }
+
+        .matrix-video-card:hover video {
+            transform: scale(1.06);
+        }
+
+        /* Поток встаёт на паузу, пока открыт полноэкранный плеер */
+        #video-matrix-right.is-paused .matrix-video-card {
+            animation-play-state: paused;
+        }
+
+        /* Карточка проезжает путь «чуть выше экрана → чуть ниже экрана».
+           Оба конца вне видимой зоны, поэтому цикл бесшовный. */
+        @keyframes cardFall {
+            /* Путь у всех карточек ОДИНАКОВЫЙ (--card-runway + 100vh), а не
+               -100% от собственной высоты: тогда карточки разной высоты падают
+               с одинаковой скоростью и зазор между ними не «плывёт» со временем. */
+            from { transform: translateY(calc(-1 * var(--card-runway))); }
+            to   { transform: translateY(100vh); }
+        }
+
+        /* ═══ Полноэкранный плеер ═══ */
+        #fullscreen-video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        #fullscreen-video-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #bg-blur-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(25px) brightness(0.4);
+            z-index: 1;
+        }
+
+        .video-player-wrapper {
+            position: relative;
+            z-index: 2;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.96);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #fullscreen-video-overlay.active .video-player-wrapper {
+            transform: scale(1);
+        }
+
+        #main-active-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;   /* вписывается либо по ширине, либо по высоте */
+            /* ВАЖНО: фон НЕ чёрный. Ролик занимает весь экран (100vw×100vh), а
+               картинка вписывается в него по одной из осей — значит узкие
+               «полосы» по краям должен заполнять размытый #bg-blur-video,
+               который лежит слоем ниже (z-index 1). Непрозрачный background
+               перекрывал его, и вместо блюра получались чёрные полосы. */
+            background: transparent;
+        }
+
+        #close-video-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: transparent;
+            border: none;
+            /* Темнее белого + в цвете ссылок/матрицы (--accent / #00b3ff) */
+            color: var(--accent);
+            font-size: 36px;
+            line-height: 1;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.2s;
+            z-index: 3;
+        }
+
+        #close-video-btn:hover {
+            opacity: 1;
+            color: #00b3ff;
+            transform: scale(1.1);
+        }
+
+        /* ═══ Нативные элементы управления полноэкранного видео ═══
+           color-scheme: dark в :root заставляет браузер рисовать иконки
+           управления тёмными (а не белыми), панель — на тёмном градиенте,
+           время — в акцентном цвете ссылок/матрицы. */
+        #main-active-video::-webkit-media-controls-panel {
+            background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.94) 45%, rgba(0, 26, 40, 0.96));
+        }
+
+        #main-active-video::-webkit-media-controls-current-time-display,
+        #main-active-video::-webkit-media-controls-time-remaining-display {
+            color: var(--accent);
+            text-shadow: 0 0 8px rgba(0, 179, 255, 0.35);
+        }
+
         code, .tag, time, .mono { font-family:"JetBrains Mono",ui-monospace,monospace; }
         h1 { font-size:2rem; margin:0 0 4px; letter-spacing:-.5px; font-weight:600; }
         h2 { color:var(--accent); font-size:1.35rem; margin:48px 0 14px; font-weight:600; scroll-margin-top:120px; }
         h3 { scroll-margin-top:120px; }
         .meta { color:var(--dim); font-size:.85rem; }
-        header { position:sticky; top:0; z-index:100; background:rgba(18,18,20,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line); padding:14px 20px 16px; margin:-24px -20px 24px; }
+        header { position:sticky; top:0; z-index:100; background:rgba(0,0,0,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line); padding:14px 20px 16px; margin:-24px -20px 24px; }
         nav ul { list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:10px 18px; font-size:.9rem; margin:14px 0 0; }
         nav a { color:var(--accent); text-decoration:none; }
         nav a:hover, nav a:focus-visible { text-decoration:underline; }
@@ -190,10 +447,51 @@
         details summary { cursor:pointer; font-weight:600; color:var(--accent); }
         details[open] summary { margin-bottom:8px; }
         @media (max-width:520px) { h1 { font-size:1.6rem; } h2 { font-size:1.2rem; } }
+
+        /* ═══ Аудиоплеер ═══ */
+        .audio-player { position: absolute; bottom: 14px; right: 20px; display: flex; align-items: center; gap: 6px; z-index: 10; }
+        .audio-btn { background: var(--card); border: 1px solid var(--line); color: var(--text); border-radius: 50%; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: border-color .2s, color .2s; flex-shrink: 0; }
+        .audio-btn:hover, .audio-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+        .audio-btn.playing { border-color: var(--accent); color: var(--accent); }
+        .audio-svg { display: block; }
+        .audio-track-name { color: var(--dim); font-size: .72rem; max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: "JetBrains Mono", ui-monospace, monospace; }
+        @media (max-width: 900px) { .audio-track-name { display: none; } }
+        @media (max-width: 520px) { .audio-player { position: static; margin-top: 10px; justify-content: flex-end; } }
     </style>
+
 </head>
 <body>
+<canvas id="matrix-bg" aria-hidden="true"></canvas>
 <div id="progress" aria-hidden="true"></div>
+
+<!-- Контейнер для падающей видео-матрицы справа -->
+<div id="video-matrix-right"></div>
+
+<!-- Полноэкранный плеер (изначально скрыт) -->
+<div id="fullscreen-video-overlay">
+    <video id="bg-blur-video" autoplay loop muted playsinline></video>
+    <div class="video-player-wrapper">
+        <video id="main-active-video" controls playsinline></video>
+        <button id="close-video-btn">✕</button>
+    </div>
+</div>
+
+<!-- Маски-силуэты для левой матрицы (используются в matrix.js).
+     Скрыты через display:none, но грузятся сразу (loading="eager"),
+     иначе ленивая загрузка их никогда не подтянет. -->
+<img id="mask-image-1" src="img/fuji.png" alt="" aria-hidden="true"
+     loading="eager" decoding="async" style="display:none">
+<img id="mask-image-2" src="img/japan-map.png" alt="" aria-hidden="true"
+     loading="eager" decoding="async" style="display:none">
+<img id="mask-image-3" src="img/kanji.png" alt="" aria-hidden="true"
+     loading="eager" decoding="async" style="display:none">
+
+<!-- Переключатель полноэкранной матрицы (тексты подставляет build.py) -->
+<button id="matrix-toggle" class="matrix-toggle" type="button" aria-pressed="false"
+        data-enter="войти в матрицу" data-exit="выйти из матрицы">
+    <span class="matrix-toggle-icon" aria-hidden="true">▣</span>
+    <span id="matrix-toggle-label">войти в матрицу</span>
+</button>
 
 <header>
     <div style="display:flex; gap:18px; align-items:center; flex-wrap:wrap;">
@@ -213,13 +511,28 @@
             <li><a href="#stats">Для спецов</a></li>
             <li><a href="#benchmark">Бенчмарк</a></li>
             <li><a href="#faq">FAQ</a></li>
-            <li><a href="index-en.html" hreflang="en">English</a></li>
+            <li><a href="index-en.html" hreflang="en" rel="alternate">English</a></li>
+            <li><a href="index-zh.html" hreflang="zh" rel="alternate">中文</a></li>
+            <li><a href="index-kr.html" hreflang="kr" rel="alternate">한국어</a></li>
+            <li><a href="index-jp.html" hreflang="jp" rel="alternate">日本語</a></li>
         </ul>
     </nav>
+    <!-- Аудиоплеер -->
+    <div id="audio-player" class="audio-player" aria-label="Аудиоплеер">
+        <button id="audio-toggle" class="audio-btn" type="button" aria-label="Play">
+            <svg id="audio-icon-play" class="audio-svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+            <svg id="audio-icon-pause" class="audio-svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="display:none"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <button id="audio-next" class="audio-btn" type="button" aria-label="Next track">
+            <svg class="audio-svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+        <span id="audio-track-name" class="audio-track-name"></span>
+        <audio id="audio-element" preload="none"></audio>
+    </div>
     <p class="meta" style="margin-top:10px;">
-        <a href="https://x.com/DenDeno9935258" target="_blank" rel="noopener me">𝕏 Полли в X</a> ·
-        <a href="https://forum.onliner.by/viewtopic.php?t=26223269" target="_blank" rel="noopener">Onliner</a> ·
-        <a href="#song">🎵 синий зонт</a>
+        <a href="https://t.me/polly_wiki" target="_blank" rel="noopener">t.me/polly_wiki</a> ·
+        <a href="https://t.me/polly_wiki_chat" target="_blank" rel="noopener">@Polly_WIKI Chat</a> ·
+        <a href="https://www.tiktok.com/@persona.uk.b" target="_blank" rel="noopener">@persona.uk.b</a>
     </p>
 </header>
 
@@ -945,7 +1258,7 @@
 <footer>
     <p>© 2026 · Проект Полли · «Сложно = неправильно» · Контекст прогрет</p>
     <p>Гомель · Сельмаш · синий зонт в фундаменте ☔</p>
-    <p><a href="https://x.com/DenDeno9935258" target="_blank" rel="noopener me">Полли в X</a> · <a href="https://forum.onliner.by/viewtopic.php?t=26223269" target="_blank" rel="noopener">Onliner</a></p>
+    <p><a href="https://t.me/polly_wiki" target="_blank" rel="noopener">t.me/polly_wiki</a> · <a href="https://t.me/polly_wiki_chat" target="_blank" rel="noopener">@Polly_WIKI Chat</a> · <a href="https://www.tiktok.com/@persona.uk.b" target="_blank" rel="noopener">@persona.uk.b</a></p>
 </footer>
 
 <script>
@@ -962,5 +1275,9 @@
         if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
     });
 </script>
+<script src="matrix.js"></script>
+<script src="video-matrix.js"></script>
+<script src="audio/tracks.js"></script>
+<script src="audio-player.js"></script>
 </body>
 </html>

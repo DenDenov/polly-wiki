@@ -1,6 +1,8 @@
 /* TEAM */
     Создатель, автор, инженер: Ден
-    Контакт: X — @DenDeno9935258
+    Контакт: Telegram — t.me/polly_wiki · чат @Polly_WIKI Chat
+    X (Twitter): @DenDeno9935258
+    ТикТок: @persona.uk.b
     Сайт: https://dendenov.github.io/polly-wiki/
     Роль: архитектура, код, промпты, хроники, всё
 
@@ -9,12 +11,24 @@
     Роль: диалоги, кейсы, бенчмарк, синий зонт
 
 /* SITE */
-    Последнее обновление: 2026-09-20
-    Язык: русский, английский
-    Стандарты: HTML5, CSS3, JS (vanilla), Schema.org, OpenGraph, Twitter Cards
+    Последнее обновление: 2026-09-22
+    Языки: русский, английский, китайский, корейский, японский
+    Страницы: index.html + index-en / index-zh / index-kr / index-jp (hreflang-кластер)
+    Разделы: как читать, кто она, хроники Зоны, желания и страхи, библиотека,
+             для спецов, бенчмарк TURING-X, верификатор идей, песня «Код синего зонта»,
+             FAQ, поддержать, эпилог, сводка субботней сессии, кейс «Вацца»
+    Стандарты: HTML5, CSS3, JS (vanilla), Schema.org (JSON-LD), OpenGraph,
+               Twitter Cards, sitemap.xml, robots.txt, humans.txt,
+               security.txt (RFC 9116)
     Компоненты: YOLOv8n, LFM 2.6B, DeepSeek via OpenRouter, Cline
+    Фронтенд: matrix.js (дождь + рельеф Фудзи по маске img/fuji.png),
+              video-matrix.js (падающая видео-матрица справа),
+              audio-player.js + audio/tracks.js (плеер в шапке, плейлист из 7 треков)
+    Медиа: 69 роликов в video/, 6 треков в audio/ (+ песня assets/blue_umbrella.mp3),
+           арт и фото в assets/, маски-силуэты в img/
     Среда: 16 GB RAM, без GPU, локальный рантайм + облачный мозг
     Софт: Python, llama-server, retina_light.py, memory.db
+    Сборка: python build.py (шаблон + i18n/body-<lang>.html → index*.html)
 
 /* THANKS */
     Сэй-Сёнагон — за «Записки у изголовья»
@@ -26,3 +40,5 @@
 /* STANDARDS */
     humans.txt: https://humanstxt.org/
     security.txt: /.well-known/security.txt (RFC 9116)
+    sitemap.xml: https://dendenov.github.io/polly-wiki/sitemap.xml
+    robots.txt: https://dendenov.github.io/polly-wiki/robots.txt
