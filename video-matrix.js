@@ -182,7 +182,7 @@
         var startX = Math.ceil(window.innerWidth / 2 + getContentHalf() + EDGE_GUTTER);
         var currentX = startX;
 
-        while (currentX + CARD_WIDTH <= window.innerWidth - EDGE_MARGIN) {
+        while (currentX < window.innerWidth - EDGE_MARGIN) {
             var column = document.createElement('div');
             column.className = 'video-column';
             column.style.left = currentX + 'px';
