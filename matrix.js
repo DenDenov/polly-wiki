@@ -271,7 +271,7 @@ function draw() {
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, visibleRight, cssH);
 
-    ctx.font = `bold ${CELL_SIZE}px 'Segoe UI', Roboto, -apple-system, sans-serif`;
+    ctx.font = `bold ${CELL_SIZE}px 'Segoe UI', Roboto, -apple-system, 'Yu Gothic', 'Meiryo', 'Noto Sans JP',     sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
