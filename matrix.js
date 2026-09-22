@@ -247,33 +247,50 @@ function draw() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // ── Pass 1: тёмные глитчи внутри иероглифов ──
-    if (glyphReady) {
-        const bx0 = Math.max(0, Math.floor(glyphRect.x / COL_SPACING));
-        const bx1 = Math.min(cols, Math.ceil((glyphRect.x + glyphRect.w) / COL_SPACING));
-        const by0 = Math.max(0, Math.floor(glyphRect.y / CELL_SIZE));
-        const by1 = Math.min(Math.ceil(cssH / CELL_SIZE),
-                             Math.ceil((glyphRect.y + glyphRect.h) / CELL_SIZE));
+// ── Pass 1: постоянный вертикальный дождь внутри иероглифов ──
+if (glyphReady) {
+    const bx0 = Math.max(0, Math.floor(glyphRect.x / COL_SPACING));
+    const bx1 = Math.min(cols, Math.ceil((glyphRect.x + glyphRect.w) / COL_SPACING));
+    const by0 = Math.max(0, Math.floor(glyphRect.y / CELL_SIZE));
+    const by1 = Math.min(Math.ceil(cssH / CELL_SIZE),
+                         Math.ceil((glyphRect.y + glyphRect.h) / CELL_SIZE));
 
-        for (let cx = bx0; cx < bx1; cx++) {
-            const x = cx * COL_SPACING + COL_SPACING * 0.5;
+    for (let cx = bx0; cx < bx1; cx++) {
+        const drop = rainDrops[cx];
+        const x = cx * COL_SPACING + COL_SPACING * 0.5;
+        const len = drop.curChars.length;
 
-            for (let cy = by0; cy < by1; cy++) {
-                const py = cy * CELL_SIZE + CELL_SIZE * 0.5;
-                if (!inGlyph(x, py)) continue;
+        // Скорость потока в ячейках/сек. Можно варьировать по колонкам.
+        // +cx*3 — сдвиг фазы между колонками, чтобы не было «рядов».
+        const flow = t * 6 + cx * 3;
 
-                const phase = Math.floor(t * 4 + cx * 3 + cy * 0.3);
-                const idx = ((phase % glitchChars.length) + glitchChars.length) % glitchChars.length;
-                const ch = glitchChars[idx];
+        for (let cy = by0; cy < by1; cy++) {
+            const py = cy * CELL_SIZE + CELL_SIZE * 0.5;
+            if (!inGlyph(x, py)) continue;
 
-                const wave = Math.sin(t * 2 + cx * 0.2 + cy * 0.15);
-                const alpha = 0.80 + 0.20 * (wave * 0.5 + 0.5);
+            // «бесконечная» координата в струе. Растёт t → символы уезжают вниз.
+            const s   = cy - flow;
+            const idx = ((Math.floor(s) % len) + len) % len;
 
-                ctx.fillStyle = 'rgba(0, 204, 255, ' + alpha.toFixed(3) + ')';
-                ctx.fillText(ch, x, py);
+            let ch = drop.curChars[idx];
+            if (ch === ' ') continue;
+
+            // редкий глитч
+            if (Math.random() < 0.008) {
+                ch = glitchChars[Math.floor(Math.random() * glitchChars.length)];
             }
+
+            // Голова струи (idx === len-1) — самая яркая, хвост затухает.
+            const progress = len > 1 ? idx / (len - 1) : 1;
+            if (idx === len - 1) {
+                ctx.fillStyle = '#66eaff';
+            } else {
+                ctx.fillStyle = 'rgba(51, 229, 255, ' + (0.35 + progress * 0.55).toFixed(3) + ')';
+            }
+            ctx.fillText(ch, x, py);
         }
     }
+}
 
     // ── Pass 2: обычный дождь ──
     for (let i = 0; i < cols; i++) {
