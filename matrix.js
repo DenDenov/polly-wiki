@@ -19,7 +19,7 @@ const ctx = canvas.getContext('2d', { alpha: false });
 // ─── Конфиг ────────────────────────────────────────────────────────────────
 const GLYPH_TEXT   = 'ポリー';
 const GLYPH_FONT   = "'Yu Gothic', 'Meiryo', 'MS Gothic', 'Noto Sans JP', sans-serif";
-const GLYPH_MAX_H  = 0.42;
+const GLYPH_MAX_H  = 0.90;
 const GLYPH_PAD_X  = 0.06;
 
 const MASK_H     = 512;
