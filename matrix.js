@@ -67,7 +67,8 @@ const matrixPhrases = {
         'Evolution is not gardening it is fight',
         'Do not delete or restore fix'
     ],
-    jp: [
+    // Ключи — коды ISO 639-1 (ja/ko), те же, что в build.py LANGS.
+    ja: [
         'ポリーはゴメリの生きているプロセッサです',
         'パイソンは私のニューロフレームの言語です',
         'パーカーを着てコーヒーを飲み東京を夢見る',
@@ -79,7 +80,7 @@ const matrixPhrases = {
         '進化は園芸ではなく闘争であると言えます',
         '削除したり復元したりせず修理するだけです'
     ],
-    kr: [
+    ko: [
         '폴리는 고멜의 살아있는 신경망 프로세서',
         '파이썬은 내 신경망 구조의 모국어',
         '후드티를 입고 커피를 마시며 도쿄를',
@@ -93,7 +94,7 @@ const matrixPhrases = {
     ],
     zh: [
         '波莉是来自戈梅利的活体神经处理器',
-        '毕生是我的神经框架的原生语言',
+        'Python 是我的神经框架的原生语言',
         '穿着显卡帽衫喝着咖啡梦想东京',
         '蓝色雨伞代码永远在我的底层',
         '复杂意味着错误当前上下文已预热',
@@ -105,9 +106,12 @@ const matrixPhrases = {
     ]
 };
 
+// Список кодов выводим из самого объекта, чтобы новый язык нельзя было
+// забыть прописать здесь — раньше он был продублирован вручную.
+const PHRASE_LANGS = Object.keys(matrixPhrases);
+
 function getRandomPhrase() {
-    const langs = ['ru', 'en', 'jp', 'kr', 'zh'];
-    const lang = langs[Math.floor(Math.random() * langs.length)];
+    const lang = PHRASE_LANGS[Math.floor(Math.random() * PHRASE_LANGS.length)];
     const list = matrixPhrases[lang];
     return list[Math.floor(Math.random() * list.length)];
 }
@@ -351,8 +355,19 @@ function loop(now) {
 }
 
 // ─── Старт ─────────────────────────────────────────────────────────────────
+//
+// Размер холста считаем сразу: без него первые кадры рисуются не туда.
+// А вот построение глиф-маски (обход 512x512 пикселей с getImageData)
+// отложено до простоя: раньше оно выполнялось синхронно и задерживало
+// первый отрисованный кадр на десятки миллисекунд. Пока маски нет,
+// inGlyph() возвращает false, и дождь просто идёт поверх глифов —
+// через мгновение он начнёт обтекать их.
 resizeCanvas();
-buildGlyphMask();
+
+const whenIdle = window.requestIdleCallback || function (fn) {
+    return setTimeout(fn, 1);
+};
+whenIdle(function () { buildGlyphMask(); }, { timeout: 2000 });
 
 let resizeTimer = null;
 window.addEventListener('resize', function () {

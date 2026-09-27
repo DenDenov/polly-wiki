@@ -7,12 +7,22 @@
 
 User-agent: *
 Allow: /
-# черновик кейса выложен отдельным .md — индексировать не нужно
-Disallow: /CASE-vatza.md
-# служебное: сборка и шаблоны локализации (дают дубли страниц)
+
+# Служебные файлы сборки и локализации — они отдают те же тексты,
+# что и готовые страницы, иначе краулер увидит дубли.
 Disallow: /build.py
+Disallow: /optimize-video.py
+Disallow: /optimize-audio.py
+Disallow: /fix-images.py
+Disallow: /gen-sitemap.py
+Disallow: /check-site.js
 Disallow: /i18n/
-# защитный запрет под будущие приватные ассеты (каталога сейчас нет)
+Disallow: /1.bat
+Disallow: /CASE-vatza.md
+Disallow: /humans.txt
+Disallow: /video/_tmp/
+
+# Защитный запрет под будущие приватные ассеты (каталога сейчас нет)
 Disallow: /assets/private/
 
 # Яндекс: игнорировать UTM-метки при обходе
@@ -30,5 +40,3 @@ User-agent: Bingbot
 Allow: /
 
 Sitemap: https://dendenov.github.io/polly-wiki/sitemap.xml
-# директиву Host Яндекс не использует с 2018 года — оставлена для совместимости
-Host: https://dendenov.github.io/polly-wiki/

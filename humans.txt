@@ -11,9 +11,10 @@
     Роль: диалоги, кейсы, бенчмарк, синий зонт
 
 /* SITE */
-    Последнее обновление: 2026-09-22
+    Последнее обновление: 2026-09-27
     Языки: русский, английский, китайский, корейский, японский
-    Страницы: index.html + index-en / index-zh / index-kr / index-jp (hreflang-кластер)
+    Страницы: index.html + index-en / index-zh / index-kr / index-jp
+              (hreflang-кластер, коды ISO 639-1: ru, en, zh, ko, ja)
     Разделы: как читать, кто она, хроники Зоны, желания и страхи, библиотека,
              для спецов, бенчмарк TURING-X, верификатор идей, песня «Код синего зонта»,
              FAQ, поддержать, эпилог, сводка субботней сессии, кейс «Вацца»
@@ -21,14 +22,21 @@
                Twitter Cards, sitemap.xml, robots.txt, humans.txt,
                security.txt (RFC 9116)
     Компоненты: YOLOv8n, LFM 2.6B, DeepSeek via OpenRouter, Cline
-    Фронтенд: matrix.js (дождь + рельеф Фудзи по маске img/fuji.png),
-              video-matrix.js (падающая видео-матрица справа),
+    Фронтенд: matrix.js (дождь, иероглифы рисуются программно на canvas),
+              video-matrix.js (падающая видео-матрица справа, ролики
+              подгружаются лениво через IntersectionObserver),
               audio-player.js + audio/tracks.js (плеер в шапке, плейлист из 7 треков)
-    Медиа: 69 роликов в video/, 6 треков в audio/ (+ песня assets/blue_umbrella.mp3),
-           арт и фото в assets/, маски-силуэты в img/
+    Доступность: анимации отключаются при prefers-reduced-motion: reduce
+    Медиа: 69 роликов в video/ (H.264, до 720px по ширине, AAC 64 кбит/с моно),
+           6 треков в audio/ + песня assets/blue_umbrella.mp3 (96 кбит/с),
+           арт и фото в assets/ (webp + jpg/png-оригиналы), og_cover.jpg 1200x630
     Среда: 16 GB RAM, без GPU, локальный рантайм + облачный мозг
     Софт: Python, llama-server, retina_light.py, memory.db
     Сборка: python build.py (шаблон + i18n/body-<lang>.html → index*.html)
+            python gen-sitemap.py (карта сайта)
+            python fix-images.py (картинки → <picture>/webp + пропорции)
+            python optimize-video.py / optimize-audio.py (пережатие медиа)
+    Проверка: node check-site.js (страницы в реальном браузере)
 
 /* THANKS */
     Сэй-Сёнагон — за «Записки у изголовья»

@@ -101,8 +101,46 @@
     var cards = [];
     var isPaused = false;
     var resumeTimer = null;
+    // ─── Подгрузка по мере появления в кадре ─────────────────────────────────
+    // Наблюдатель один на все карточки. rootMargin — карточка начинает
+    // подгружаться, когда до её верхнего края остаётся 1.5 высоты окна:
+    // пользователь успевает дождаться готового кадра, а ролики за экраном
+    // не качаются.
+    var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            var obj = e.target.__pollyCard;
+            if (!obj) return;
+            obj.visible = e.isIntersecting;
+            if (e.isIntersecting) {
+                obj.load();
+                if (!isPaused) obj.play();
+            } else {
+                obj.pause();
+            }
+        });
+    }, { rootMargin: '150% 0px 150% 0px', threshold: 0 }) : null;
+
+    function watchCard(obj) {
+        obj.element.__pollyCard = obj;
+        if (io) {
+            io.observe(obj.element);
+        } else {
+            // Фолбэк для старых браузеров: грузим сразу, но playback
+            // всё равно ограничен паузой при скрытой вкладке.
+            obj.visible = true;
+            obj.load();
+        }
+    }
+
 
     // ─── Создание карточки ──────────────────────────────────────────────────
+    //
+    // Ключевой момент для скорости: src НЕ присваивается сразу.
+    // Раньше стоял preload="auto" и src сразу — браузер начинал тянуть
+    // все ~70 роликов (тогда это было 179 МБ) уже во время первой загрузки
+    // страницы, не дожидаясь прокрутки. Теперь файл подставляется только
+    // когда карточка реально близко к области просмотра, а playback
+    // запускается отдельно — когда она в неё входит.
     function createCard(columnEl, duration, delay) {
         var src = takeNextSource();
 
@@ -119,8 +157,9 @@
         videoEl.setAttribute('muted', '');
         videoEl.setAttribute('playsinline', '');
         videoEl.setAttribute('aria-hidden', 'true');
-        videoEl.preload = 'auto';
-        videoEl.src = src;
+        videoEl.preload = 'none';
+        // Пока файл не подставлен, карточка — тёмный прямоугольник.
+        card.style.background = '#000';
 
         card.appendChild(videoEl);
 
@@ -128,35 +167,52 @@
             element: card,
             videoElement: videoEl,
             src: src,
+            loaded: false,
+            visible: false,
             retried: false
         };
+
+        function load() {
+            if (cardObj.loaded) return;
+            cardObj.loaded = true;
+            videoEl.src = src;
+            videoEl.load();
+        }
+
+        function play() {
+            if (!cardObj.visible || isPaused) return;
+            if (!cardObj.loaded) load();
+            var p = videoEl.play();
+            if (p && p.catch) p.catch(function () {});
+        }
+
+        function pause() {
+            if (!videoEl.paused) videoEl.pause();
+        }
+
+        cardObj.load = load;
+        cardObj.play = play;
+        cardObj.pause = pause;
 
         // Файл не нашёлся / битый — один раз подменяем на другой из мешка
         videoEl.addEventListener('error', function () {
             if (cardObj.retried) return;
             cardObj.retried = true;
-            cardObj.src = takeNextSource();
-            videoEl.src = cardObj.src;
-            if (!isPaused) {
-                var p = videoEl.play();
-                if (p && p.catch) p.catch(function () {});
-            }
+            cardObj.loaded = false;
+            src = takeNextSource();
+            cardObj.src = src;
+            videoEl.src = src;
+            if (cardObj.visible && !isPaused) play();
         });
 
         // Смена ролика на каждом новом витке падения — берём следующий из мешка
         card.addEventListener('animationiteration', function () {
-            cardObj.src = takeNextSource();
-            videoEl.src = cardObj.src;
-            if (!isPaused) {
-                var p = videoEl.play();
-                if (p && p.catch) p.catch(function () {});
-            }
+            src = takeNextSource();
+            cardObj.src = src;
+            cardObj.loaded = true;
+            videoEl.src = src;
+            if (cardObj.visible && !isPaused) play();
         });
-
-        if (!isPaused) {
-            var playPromise = videoEl.play();
-            if (playPromise && playPromise.catch) playPromise.catch(function () {});
-        }
 
         card.addEventListener('click', function () {
             openFullscreen(cardObj.src);
@@ -164,10 +220,19 @@
 
         columnEl.appendChild(card);
         cards.push(cardObj);
+        watchCard(cardObj);
     }
 
     // ─── Построение потока ──────────────────────────────────────────────────
     function initVideoMatrix() {
+        // Старые карточки снимаем с наблюдения: иначе при каждом ресайзе
+        // IntersectionObserver держит ссылки на удалённые из DOM элементы
+        // вместе с их <video>, и память течёт, а файлы продолжают качаться.
+        if (io) {
+            cards.forEach(function (cardObj) { io.unobserve(cardObj.element); });
+        }
+        cards.forEach(function (cardObj) { cardObj.pause(); });
+
         videoContainer.innerHTML = '';
         cards = [];
         sourceBag = [];
@@ -210,19 +275,16 @@
     }
 
     // ─── Полноэкранный просмотр ─────────────────────────────────────────────
+    // Пауза/возобновление идёт через cardObj.pause()/play(), а не напрямую
+    // через videoElement: play() сам учитывает isPaused и cardObj.visible,
+    // поэтому карточки за пределами экрана не стартуют playback'ом заново
+    // (и не качают файлы, которых не видно).
     function pauseCardVideos() {
-        cards.forEach(function (cardObj) {
-            cardObj.wasPlaying = !cardObj.videoElement.paused;
-            if (cardObj.wasPlaying) cardObj.videoElement.pause();
-        });
+        cards.forEach(function (cardObj) { cardObj.pause(); });
     }
 
     function resumeCardVideos() {
-        cards.forEach(function (cardObj) {
-            if (!cardObj.wasPlaying) return;
-            var p = cardObj.videoElement.play();
-            if (p && p.catch) p.catch(function () {});
-        });
+        cards.forEach(function (cardObj) { cardObj.play(); });
     }
 
     function pauseFlow() {
@@ -311,5 +373,22 @@
         resizeTimer = setTimeout(initVideoMatrix, 200);
     });
 
-    initVideoMatrix();
+    // Построение потока отложено до простоя. При высоте окна 900 px
+    // initVideoMatrix() создаёт около 30 колонок с карточками, и на каждую
+    // вешается IntersectionObserver. Синхронно это занимало 100-180 мс
+    // монолитным куском и попадало в первые секунды загрузки — браузер
+    // считал это «долгой задачей» и показывал полосу загрузки поверх
+    // уже отрисованного текста.
+    //
+    // Кликнуть по карточке до её построения нельзя: поток пуст, колонок
+    // нет. Поэтому на время ожидания вешаем класс is-loading, который
+    // прячет матрицу — чтобы не мигало пустое место справа от текста.
+    var idle = window.requestIdleCallback || function (fn) {
+        return setTimeout(fn, 1);
+    };
+    videoContainer.classList.add('is-loading');
+    idle(function () {
+        initVideoMatrix();
+        videoContainer.classList.remove('is-loading');
+    }, { timeout: 2000 });
 })();
