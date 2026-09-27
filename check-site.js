@@ -7,7 +7,9 @@
  *  • сколько байт видео реально скачалось при первом открытии страницы
  *    (раньше preload="auto" тянул все 179 МБ сразу — это главная проверка);
  *  • корректность JSON-LD и соответствие числа вопросов FAQ разметке в HTML;
- *  • hreflang-кластер: коды должны быть из ISO 639-1.
+ *  • hreflang-кластер: коды должны быть из ISO 639-1;
+ *  • robots.txt: каждый служебный файл закрыт, humans.txt наоборот открыт,
+ *    sitemap объявлен (запрет на несуществующий файл — тоже ошибка).
  *
  * Запуск:  node check-site.js
  */
@@ -229,6 +231,46 @@ const VALID_HREFLANG = ['ru', 'en', 'zh', 'ko', 'ja', 'x-default'];
       console.log('  ✓ анимации и загрузка видео отключены');
     }
     await p.close();
+  }
+
+  // ─── Сверяем robots.txt с реальным содержимым папки ───────────────────
+  // Смысл: запрет в robots.txt на файл, которого уже нет, — это враньё
+  // в документации. А служебный файл, который забыли запретить, попадёт
+  // в индекс Google вместе со своим исходным кодом.
+  {
+    const robots = fs.readFileSync(path.join(BASE, 'robots.txt'), 'utf8');
+    const blocked = [...robots.matchAll(/^Disallow:\s*(\S+)/gm)]
+      .map(m => m[1])
+      .filter(p => p !== '/' && !p.startsWith('/assets/private'));
+
+    // реальные служебные файлы в корне.
+    // Файлы, начинающиеся с подчёркивания, — мои временные замеры; они
+    // уже исключены в .gitignore, здесь то же правило, иначе проверка
+    // ругается на собственные вспомогательные скрипты.
+    const serviceFiles = fs.readdirSync(BASE)
+      .filter(f => /\.(py|js|bat|md|json)$/.test(f))
+      .filter(f => !f.startsWith('_'))
+      .filter(f => f !== 'package-lock.json')
+      .map(f => '/' + f);
+
+    const missing = serviceFiles.filter(f => !blocked.includes(f));
+    // папка i18n должна быть закрыта целиком
+    if (!blocked.includes('/i18n/')) missing.push('/i18n/');
+    // humans.txt наоборот обязан быть открыт: его читают люди и краулеры
+    const humansBlocked = blocked.includes('/humans.txt');
+    // sitemap должен быть объявлен
+    const hasSitemap = /Sitemap:\s*https?:\/\//i.test(robots);
+
+    console.log('\n=== robots.txt ===');
+    console.log('  запрещено путей :', blocked.length);
+    console.log('  служебных файлов:', serviceFiles.length);
+    if (missing.length) console.log('  НЕ запрещены    :', missing.join(', '));
+    console.log('  humans.txt      :', humansBlocked ? 'закрыт (ошибка)' : 'открыт');
+    console.log('  Sitemap:        :', hasSitemap ? 'объявлен' : 'НЕ объявлен');
+
+    if (missing.length) failed++;
+    if (humansBlocked) failed++;
+    if (!hasSitemap) failed++;
   }
 
   await browser.close();

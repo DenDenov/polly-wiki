@@ -10,17 +10,37 @@ Allow: /
 
 # Служебные файлы сборки и локализации — они отдают те же тексты,
 # что и готовые страницы, иначе краулер увидит дубли.
+# ВАЖНО: список синхронизируется с check-site.js (раздел «robots»),
+# который проверяет, что каждый запретённый путь действительно закрыт,
+# а каждый реально существующий служебный файл — упомянут.
 Disallow: /build.py
 Disallow: /optimize-video.py
 Disallow: /optimize-audio.py
 Disallow: /fix-images.py
 Disallow: /gen-sitemap.py
+Disallow: /make-favicon.py
+Disallow: /set_a11y.py
+Disallow: /set_audio_preload.py
+Disallow: /set_case_links.py
 Disallow: /check-site.js
+Disallow: /perf-audit.js
+Disallow: /package.json
+# Клиентские скрипты: поисковику нечего индексировать в исходнике,
+# который уже учтён в самой странице.
+Disallow: /matrix.js
+Disallow: /video-matrix.js
+Disallow: /audio-player.js
+Disallow: /audio/tracks.js
 Disallow: /i18n/
 Disallow: /1.bat
-Disallow: /CASE-vatza.md
-Disallow: /humans.txt
 Disallow: /video/_tmp/
+
+# Кейсы в папке cases/ — это контент, а не служебные файлы: на них
+# ведут ссылки со всех пяти страниц, и Google должен их обходить
+# и включать в индекс. Поэтому cases/ здесь намеренно НЕ запрещён.
+
+# humans.txt здесь НЕ запрещён: его назначение — быть прочитанным.
+# В нём указано, что за сайт и куда писать его автору.
 
 # Защитный запрет под будущие приватные ассеты (каталога сейчас нет)
 Disallow: /assets/private/

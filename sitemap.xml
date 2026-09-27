@@ -88,4 +88,39 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dendenov.github.io/polly-wiki/"/>
   </url>
 
+  <url>
+    <loc>https://dendenov.github.io/polly-wiki/cases/CASE-vatza-en.md</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://dendenov.github.io/polly-wiki/cases/CASE-vatza-ja.md</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://dendenov.github.io/polly-wiki/cases/CASE-vatza-ko.md</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://dendenov.github.io/polly-wiki/cases/CASE-vatza-ru.md</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://dendenov.github.io/polly-wiki/cases/CASE-vatza-zh.md</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
 </urlset>
