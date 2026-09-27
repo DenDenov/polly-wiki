@@ -559,41 +559,6 @@
         @media (max-width: 900px) { .audio-track-name { display: none; } }
         @media (max-width: 520px) { .audio-player { position: static; margin-top: 10px; justify-content: flex-end; } }
 
-        /* ── Доступность: «меньше движения» = без движения, а не без матриц ──
-           Раньше здесь стояло `#matrix-bg, #video-matrix-right { display: none }`.
-           Из-за этого на любой машине с выключенными анимациями Windows
-           (параметр MinAnimate=0, «Эффекты анимации» выкл.) страница
-           выглядела поломанной: поля слева и справа пустые, хотя места
-           для дождя и карточек полно. Настройка честно говорит «не
-           двигай», но не говорит «убери».
-           Теперь: полосы остаются на месте и заполнены, а движение
-           останавливается. Карточки застывают на своих фазах — фаза
-           задана отрицательным animation-delay из JS, поэтому они
-           разнесены по высоте, а не сложены в одну стопку. */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: .001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: .001ms !important;
-            }
-            /* Полосы видимы. Для <canvas> нужен явный block: по умолчанию
-               он inline, и без этого не рисуется. */
-            #matrix-bg { display: block !important; }
-            #video-matrix-right { display: block !important; }
-            /* Застывшие карточки: длинная длительность + пауза = позиция
-               из animation-delay, без движения. Перебиваем общий
-               .001ms !important выше, иначе все карточки схлопнулись бы
-               в верхний край колонки. */
-            .matrix-video-card {
-                animation-name: cardFall !important;
-                animation-duration: 600s !important;
-                animation-timing-function: linear !important;
-                animation-iteration-count: 1 !important;
-                animation-play-state: paused !important;
-            }
-            /* Глитч — это движение, отключаем. */
-            .matrix-video-card > video { animation: none !important; }
-        }
     </style>
 
 </head>
@@ -1504,6 +1469,11 @@
         }
     })();
 </script>
+<!-- Порядок важен: matrix-layout.js меряет свободные поля и вешает на
+     <html> класс no-side-matrix, на который смотрят и CSS, и matrix.js.
+     Он должен выполниться ДО matrix.js, иначе первый дождь начнёт
+     рисоваться там, где места нет. -->
+<script src="matrix-layout.js"></script>
 <script src="matrix.js"></script>
 <script src="video-matrix.js"></script>
 <script src="audio/tracks.js"></script>

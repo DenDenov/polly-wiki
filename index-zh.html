@@ -559,19 +559,6 @@
         @media (max-width: 900px) { .audio-track-name { display: none; } }
         @media (max-width: 520px) { .audio-player { position: static; margin-top: 10px; justify-content: flex-end; } }
 
-        /* ── Доступность: уважаем системную настройку «меньше движения» ──
-           Дождь из matrix.js и падающие карточки видео — это постоянная
-           анимация во весь экран. Для людей с вестибулярными расстройствами
-           она вызывает тошноту, и для них это не украшение, а проблема. */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: .001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: .001ms !important;
-            }
-            .matrix-video-card { animation: none !important; }
-            #matrix-bg, #video-matrix-right { display: none !important; }
-        }
     </style>
 
 </head>
@@ -1487,6 +1474,11 @@
         }
     })();
 </script>
+<!-- Порядок важен: matrix-layout.js меряет свободные поля и вешает на
+     <html> класс no-side-matrix, на который смотрят и CSS, и matrix.js.
+     Он должен выполниться ДО matrix.js, иначе первый дождь начнёт
+     рисоваться там, где места нет. -->
+<script src="matrix-layout.js"></script>
 <script src="matrix.js"></script>
 <script src="video-matrix.js"></script>
 <script src="audio/tracks.js"></script>
