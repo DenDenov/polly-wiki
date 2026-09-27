@@ -23,6 +23,7 @@ Disallow: /set_a11y.py
 Disallow: /set_audio_preload.py
 Disallow: /set_case_links.py
 Disallow: /check-site.js
+Disallow: /audit-matrix-speed.js
 Disallow: /perf-audit.js
 Disallow: /package.json
 # Клиентские скрипты: поисковику нечего индексировать в исходнике,
