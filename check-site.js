@@ -80,10 +80,10 @@ const VALID_HREFLANG = ['ru', 'en', 'zh', 'ko', 'ja', 'x-default'];
   for (const page of PAGES) {
     const p = await browser.newPage();
     await p.setViewport({ width: 1600, height: 900 });
-    // Headless Chrome по умолчанию сообщает prefers-reduced-motion: reduce,
-    // при котором матрица намеренно скрывается (см. @media в <style>).
-    // Для основных проверок эмулируем обычный режим — его видит
-    // подавляющее большинство пользователей.
+    // Явно просим обычный режим анимации. Без этой строки headless Chrome
+    // сообщает prefers-reduced-motion: reduce — это состояние по умолчанию
+    // у пользователя, у которого в Windows выключены «Эффекты анимации».
+    // Отдельная проверка ниже всё равно прогоняет страницу при reduce.
     await p.emulateMediaFeatures([
       { name: 'prefers-reduced-motion', value: 'no-preference' },
     ]);
@@ -197,6 +197,12 @@ const VALID_HREFLANG = ['ru', 'en', 'zh', 'ko', 'ja', 'x-default'];
   // ─── Отдельно проверяем режим «меньше движения» ─────────────────────────
   // Он включается в настройках ОС. Важно, что при нём анимации не просто
   // замедляются, а выключаются, и тяжёлые файлы не качаются зря.
+  // ─── Матрицы работают и при prefers-reduced-motion: reduce ───────────────
+  // Раньше здесь стояло обратное ожидание: матрицы ДОЛЖНЫ выключаться при
+  // reduce. Но у пользователя в Windows выключены «Эффекты анимации», то
+  // есть браузер всегда шлёт reduce — и из-за этого поля слева и справа от
+  // текста были пустыми. Задача: матрицы работают ВСЕГДА. Проверка ниже
+  // требует ровно этого, а «отключения» больше не существует.
   {
     const p = await browser.newPage();
     await p.setViewport({ width: 1600, height: 900 });
@@ -207,28 +213,33 @@ const VALID_HREFLANG = ['ru', 'en', 'zh', 'ko', 'ja', 'x-default'];
     p.on('response', r => {
       if (r.url().includes('/video/')) bytes.n += Number(r.headers()['content-length'] || 0);
     });
-    await p.goto('http://localhost:' + PORT + '/index.html', { waitUntil: 'networkidle2' });
-    await new Promise(r => setTimeout(r, 2000));
+    await p.goto('http://localhost:' + PORT + '/index.html', { waitUntil: 'domcontentloaded' });
+    await new Promise(r => setTimeout(r, 2500));
     const rm = await p.evaluate(() => ({
       reduce: matchMedia('(prefers-reduced-motion: reduce)').matches,
       matrix: getComputedStyle(document.getElementById('matrix-bg')).display,
       videoFlow: getComputedStyle(document.getElementById('video-matrix-right')).display,
+      cards: document.querySelectorAll('.matrix-video-card').length,
+      gap: parseFloat(getComputedStyle(document.documentElement)
+        .getPropertyValue('--side-gap')) || 0,
     }));
     console.log('\n=== prefers-reduced-motion: reduce ===');
     console.log('  matchMedia         :', rm.reduce);
     console.log('  #matrix-bg         :', rm.matrix);
     console.log('  #video-matrix-right:', rm.videoFlow);
+    console.log('  свободное поле     :', rm.gap + 'px');
+    console.log('  карточек           :', rm.cards);
     console.log('  скачано video      :', (bytes.n / 1048576).toFixed(1), 'МБ');
     const rmProblems = [];
     if (!rm.reduce) rmProblems.push('эмуляция не применилась');
-    if (rm.matrix !== 'none') rmProblems.push('дождь не отключён');
-    if (rm.videoFlow !== 'none') rmProblems.push('видео-поток не отключён');
-    if (bytes.n > 0) rmProblems.push('видео всё равно скачивается');
+    if (rm.gap >= 8 && rm.matrix === 'none') rmProblems.push('дождь выключен, хотя поле есть');
+    if (rm.gap >= 8 && rm.videoFlow === 'none') rmProblems.push('видео-поток выключен, хотя поле есть');
+    if (rm.gap >= 8 && rm.cards === 0) rmProblems.push('карточек нет, хотя поле есть');
     if (rmProblems.length) {
       failed++;
       rmProblems.forEach(x => console.log('  ✗ ' + x));
     } else {
-      console.log('  ✓ анимации и загрузка видео отключены');
+      console.log('  ✓ матрицы работают при reduce');
     }
     await p.close();
   }

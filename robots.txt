@@ -25,10 +25,16 @@ Disallow: /set_case_links.py
 Disallow: /check-site.js
 Disallow: /audit-matrix-speed.js
 Disallow: /perf-audit.js
+Disallow: /verify-matrices.js
+Disallow: /verify-langs.js
 Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /build_docs.bat
+Disallow: /build_docs.py
 # Клиентские скрипты: поисковику нечего индексировать в исходнике,
 # который уже учтён в самой странице.
 Disallow: /matrix.js
+Disallow: /matrix-layout.js
 Disallow: /video-matrix.js
 Disallow: /audio-player.js
 Disallow: /audio/tracks.js

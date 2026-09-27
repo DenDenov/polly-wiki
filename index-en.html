@@ -263,7 +263,13 @@
            вычисляется в скрипте из реальных размеров шапки.
            Значение по умолчанию — на случай отключённого JS. */
         html { scroll-padding-top: var(--header-h, 240px); }
-        body { font-family:"Inter",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; max-width:820px; margin:0 auto; padding:24px 20px; position: relative; z-index: 2; }
+        /* Ширина центрального блока. max-width не фиксирован, а считается от
+           ширины окна за вычетом полосы, которую matrix-layout.js резервирует
+           под матрицы (--side-reserve). Поэтому поля слева и справа от текста
+           появляются уже на 760px, а не только на широком мониторе.
+           --side-reserve выставляет скрипт; 0px — значение по умолчанию
+           для случая, когда скрипт не запустился. */
+        body { font-family:"Inter",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; max-width:min(820px, calc(100% - 2 * var(--side-reserve, 0px))); margin:0 auto; padding:24px 20px; position: relative; z-index: 2; }
 
         /* Matrix Digital Rain Background */
         #matrix-bg {
@@ -1491,11 +1497,15 @@
 <!-- Порядок важен: matrix-layout.js меряет свободные поля и вешает на
      <html> класс no-side-matrix, на который смотрят и CSS, и matrix.js.
      Он должен выполниться ДО matrix.js, иначе первый дождь начнёт
-     рисоваться там, где места нет. -->
-<script src="matrix-layout.js"></script>
-<script src="matrix.js"></script>
-<script src="video-matrix.js"></script>
-<script src="audio/tracks.js"></script>
-<script src="audio-player.js"></script>
+     рисоваться там, где места нет.
+
+     ?v=74e9be43 — хэш содержимого скриптов. Без него после пересборки
+     браузер мог выполнить старый matrix.js против новой разметки,
+     и матрицы пропадали бы на части языковых версий. -->
+<script src="matrix-layout.js?v=74e9be43"></script>
+<script src="matrix.js?v=74e9be43"></script>
+<script src="video-matrix.js?v=74e9be43"></script>
+<script src="audio/tracks.js?v=74e9be43"></script>
+<script src="audio-player.js?v=74e9be43"></script>
 </body>
 </html>

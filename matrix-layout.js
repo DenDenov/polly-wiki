@@ -23,46 +23,79 @@
     'use strict';
 
     // Порог свободного поля. Раньше здесь стояло 186 px (полная колонка
-    // 180 + зазор), и на окне 1024px поля по 102px с каждой стороны
-    // оказывались «недостаточными» — полосы исчезали совсем. Задача
-    // другая: полосы нужны всегда, где поле вообще есть, а колонка может
-    // выходить за край окна. Поэтому порог ниже минимального осмысленного
-    // поля, а не ширины целой колонки: 60 px — это столько же, сколько
-    // matrix.js берёт как нижнюю границу для дождя.
-    var MIN_SIDE_PX = 60;
+    // 180 + зазор), потом 60 px, и на окне 1024px поля по 102px с каждой
+    // стороны оказывались «недостаточными» — полосы исчезали совсем.
+    // Задача: полосы нужны ВСЕГДА, где поле вообще есть. Колонка может
+    // выходить за край окна (обрезанная колонка у края — не поломка),
+    // поэтому порог — это «есть ли хоть сколько-то места», а не ширина
+    // целой карточки. 8 px — уже видно полосу дождя.
+    var MIN_SIDE_PX = 8;
     // Порог включения/выключения. Разные значения нужны, чтобы при
     // медленной перетаске окна класс не мигал на границе.
-    var HYSTERESIS = 12;
+    var HYSTERESIS = 6;
+
+    // Ширина центрального блока в номинальном виде и сколько полей мы
+    // хотим видеть по бокам от него. Пока окно шире CONTENT_MAX + 2*IDEAL_SIDE,
+    // блок не трогаем — поля и так получаются щедрыми. Уже окно у́же —
+    // отдаём матрицам IDEAL_SIDE с каждой стороны и ужимаем текст,
+    // иначе поля просто исчезают.
+    var CONTENT_MAX = 820;
+    var IDEAL_SIDE = 110;
+    // Ниже этой ширины текст ужимать дальше нельзя: дальше начинается
+    // нечитаемая колонка из двух слов на строку.
+    var MIN_TEXT_W = 300;
 
     var root = document.documentElement;
 
+    // Реальная половина ширины центрального блока.
+    //
+    // Раньше --content-half был зашит в CSS как 410px (820 / 2) и никогда
+    // не пересчитывался. Но реальная ширина блока равна 820px целиком
+    // (max-width), а 410 — это половина 820 без padding'а в 20px с каждой
+    // стороны. Из-за расхождения clip-path матриц обрезался не по краю
+    // текста, а на 20px глубже: у края полосы оставалась мёртвая чёрная
+    // полоса, а дождь местами лез под текст. Поэтому меряем DOM.
     function contentHalf() {
-        var raw = getComputedStyle(root).getPropertyValue('--content-half');
-        var v = parseFloat(raw);
-        // Фолбэк совпадает с --content-half в CSS: на узком экране
-        // центральный блок занимает всё поле.
-        if (!v || isNaN(v)) {
-            v = window.innerWidth < 1000
-                ? window.innerWidth : window.innerWidth * 0.27;
-        }
-        return v;
+        var body = document.body;
+        if (!body) return 410;
+        var rect = body.getBoundingClientRect();
+        if (!rect.width) return 410;
+        // body имеет padding 20px слева и справа, а нам нужна ширина
+        // именно области с текстом.
+        var cs = getComputedStyle(body);
+        var padL = parseFloat(cs.paddingLeft) || 0;
+        var padR = parseFloat(cs.paddingRight) || 0;
+        var inner = rect.width - padL - padR;
+        return inner / 2;
     }
 
     function update() {
+        var vw = window.innerWidth;
+
+        // Пока окно достаточно широкое, центральный блок не трогаем.
+        // Как только поля начинают сжиматься — отдаём матрицам IDEAL_SIDE,
+        // но не больше, чем можно отнять у текста без вреда для чтения.
+        var reserve = 0;
+        if (vw < CONTENT_MAX + 2 * IDEAL_SIDE) {
+            reserve = Math.max(0, Math.min(IDEAL_SIDE, (vw - MIN_TEXT_W) / 2));
+        }
+        root.style.setProperty('--side-reserve', Math.round(reserve) + 'px');
+
+        // Пересчитываем после смены резерва: ширина блока уже другая.
         var half = contentHalf();
+        root.style.setProperty('--content-half', Math.round(half) + 'px');
+
         // Свободное поле с одной стороны.
-        var gap = window.innerWidth / 2 - half;
+        var gap = vw / 2 - half;
         root.style.setProperty('--side-gap', Math.max(0, Math.round(gap)) + 'px');
 
-        var hidden = root.classList.contains('no-side-matrix');
         if (gap >= MIN_SIDE_PX + HYSTERESIS) {
             root.classList.remove('no-side-matrix');
         } else if (gap < MIN_SIDE_PX - HYSTERESIS) {
             root.classList.add('no-side-matrix');
         }
         // В «серой зоне» оставляем как есть — иначе окно шириной ровно
-        // в 60px дёргалось бы между состояниями на каждом пикселе.
-        void hidden;
+        // в границу дёргалось бы между состояниями на каждом пикселе.
     }
 
     update();
@@ -77,11 +110,18 @@
 
     // Ширина центрального блока меняется и без ресайза окна — например,
     // после смены шрифта или загрузки картинки в шапке. На это есть
-    // ResizeObserver, но не во всех браузерах; страховка через
-    // повторную проверку на загрузке.
+    // ResizeObserver, но он же опасен: update() меняет --side-reserve,
+    // от чего меняется ширина body, что снова будит наблюдатель. Поэтому
+    // сравниваем с прошлым значением и выходим, если ничего не поменялось.
     window.addEventListener('load', update);
     if (window.ResizeObserver) {
         var main = document.querySelector('main') || document.body;
-        new ResizeObserver(update).observe(main);
+        var lastW = -1;
+        new ResizeObserver(function (entries) {
+            var w = Math.round(entries[0].contentRect.width);
+            if (w === lastW) return;
+            lastW = w;
+            update();
+        }).observe(main);
     }
 })();
