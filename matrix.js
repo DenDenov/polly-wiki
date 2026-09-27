@@ -374,20 +374,7 @@ function sideSpaceAvailable() {
     return !document.documentElement.classList.contains('no-side-matrix');
 }
 
-// «Меньше движения» означает «без движения», а НЕ «без матриц».
-// Раньше CSS при reduce просто скрывал полосы целиком, и на машине с
-// выключенными анимациями Windows страница выглядела поломанной: поля по
-// краям пустые, хотя места для дождя полно. Теперь рисуем ровно один
-// кадр и цикл не запускаем — матрица на месте и неподвижна.
-function reducedMotion() {
-    return window.matchMedia
-        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-let reducedMode = reducedMotion();
-
 function loop(now) {
-    if (reducedMode) return;          // статичный кадр, дальше не идём
     if (!document.hidden && sideSpaceAvailable() &&
         now - lastDraw >= FRAME_INTERVAL) {
         // Первый кадр: шага нет, рисуем без сдвига. Дальше dt ограничен
@@ -401,24 +388,6 @@ function loop(now) {
     requestAnimationFrame(loop);
 }
 
-// Настройку могут сменить прямо во время работы — тогда перерисовываем
-// один кадр и снова уходим в статику (или обратно в анимацию).
-if (window.matchMedia) {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const onChange = () => {
-        const now = reducedMotion();
-        if (now === reducedMode) return;
-        reducedMode = now;
-        if (now) {
-            draw(0);                                   // один статичный кадр
-        } else {
-            lastDraw = 0;                              // мягкий старт анимации
-            requestAnimationFrame(loop);
-        }
-    };
-    if (mq.addEventListener) mq.addEventListener('change', onChange);
-    else if (mq.addListener) mq.addListener(onChange);
-}
 
 // ─── Старт ─────────────────────────────────────────────────────────────────
 //
@@ -440,19 +409,10 @@ window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
         resizeCanvas();
-        // В статичном режиме resizeCanvas сам по себе картинку не обновит:
-        // цикл не идёт, значит ни один draw() не произойдёт.
-        if (reducedMode) draw(0);
     }, 150);
 });
 
-// При «меньше движения» рисуем ОДИН кадр и не запускаем цикл: полоса
-// заполнена, но ничего не движется. Иначе (обычный режим) — полный цикл.
-if (reducedMode) {
-    whenIdle(function () { draw(0); }, { timeout: 2000 });
-} else {
-    requestAnimationFrame(loop);
-}
+requestAnimationFrame(loop);
 
 // Экспорт состояния дождя — им пользуется audit-matrix-speed.js, который
 // сверяет скорость падения левой и правой полосы между собой. По одной
