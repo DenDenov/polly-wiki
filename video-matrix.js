@@ -76,8 +76,18 @@
     var COLUMN_STEP = CARD_WIDTH + COLUMN_GAP;
     var EDGE_GUTTER = 20;      // отступ первой колонки от границы контента
     var EDGE_MARGIN = 4;       // чтобы последняя колонка не уезжала за правый край
-    var MIN_SPEED_MS = 34;     // самая быстрая колонка, сек. на полный путь
-    var SPEED_SPREAD = 38;     // разброс длительности анимации, сек.
+    // Ниже этого размера полосы справа поток не строим: одна карточка (180px)
+    // уже не помещается целиком, и колонка получилась бы обрезанным огрызком.
+    // Обрезание у края окна допустимо, но не настолько мелкое.
+    var MIN_BAND_RIGHT = 120;
+    // ─── Скорость падения ───────────────────────────────────────────────────
+    // Левая матрица (matrix.js) падает со скоростью 0.3..0.8 клетки/кадр при
+    // TARGET_FPS = 30, CELL_SIZE = 14 → 126..336 px/сек. Раньше правая шла
+    // в 6-10 раз медленнее (33..57 px/сек), и полосы явно читались как
+    // разные по скорости потоки. Здесь задаём скорость напрямую в px/сек,
+    // чтобы обе стороны совпадали, и добавляем небольшой разброс.
+    var FALL_MIN_PX = 126;   // совпадает с минимальной скоростью левой полосы
+    var FALL_MAX_PX = 336;   // и с максимальной
 
     // Шаг между карточками в колонке. Задаём его сами (а не выводим из пути),
     // а «разгон» над экраном (--card-runway) подбираем так, чтобы шаг уложился
@@ -158,6 +168,11 @@
         videoEl.setAttribute('playsinline', '');
         videoEl.setAttribute('aria-hidden', 'true');
         videoEl.preload = 'none';
+        // Глитч превью (CSS cardGlitch). Сдвигаем фазу и период случайно,
+        // иначе все карточки «сбоили» синхронно и это читалось как пульсация,
+        // а не как случайные сбои. Период отличается у соседних карточек.
+        videoEl.style.animationDelay = (-Math.random() * 9) + 's';
+        videoEl.style.animationDuration = (5 + Math.random() * 7) + 's';
         // Пока файл не подставлен, карточка — тёмный прямоугольник.
         card.style.background = '#000';
 
@@ -239,15 +254,25 @@
         sourceBagIndex = 0;
         lastTaken = null;
 
-        if (window.innerWidth <= 1000) return;
+        // ─── Заполнение правой полосы ───────────────────────────────────────
+        // Главное — полоса справа от центрального текста заполнена целиком.
+        // Обрезанная у края окна колонка не страшна, пустой чёрный край —
+        // страшен. Поэтому берём НИЖНУЮ границу числа колонок: сколько нужно,
+        // чтобы закрыть полосу, и одна лишняя, уходящая за край.
+        var bandStart = window.innerWidth / 2 + getContentHalf() + EDGE_GUTTER;
+        var band      = window.innerWidth - bandStart;
+        if (band < MIN_BAND_RIGHT) return;   // места нет — поток не строим
 
+        // Число карточек в колонке и «разгон» считаем ОДИН раз на поток,
+        // а не внутри цикла по колонкам: от высоты окна зависят оба, и
+        // колонки обязаны иметь одинаковую плотность.
         var vh = window.innerHeight;
         var perColumn = cardsPerColumn(vh);
 
-        var startX = Math.ceil(window.innerWidth / 2 + getContentHalf() + EDGE_GUTTER);
-        var currentX = startX;
+        var count = Math.ceil(band / COLUMN_STEP);
 
-        while (currentX < window.innerWidth - EDGE_MARGIN) {
+        for (var c = 0; c < count; c++) {
+            var currentX = Math.round(bandStart + c * COLUMN_STEP);
             var column = document.createElement('div');
             column.className = 'video-column';
             column.style.left = currentX + 'px';
@@ -259,9 +284,11 @@
             var runway = perColumn * CARD_STEP_Y - vh;
             column.style.setProperty('--card-runway', runway + 'px');
 
-            // Скорость падения одинаковая во всех колонках и на любом окне:
-            // длительность анимации пропорциональна собственному пути колонки.
-            var speed = (vh + CARD_MAX_HEIGHT) / (MIN_SPEED_MS + Math.random() * SPEED_SPREAD);
+            // Скорость падения в px/сек, случайная внутри полосы — так же, как
+            // у левой матрицы. Длительность выводится из СОБСТВЕННОГО пути
+            // колонки, поэтому на любой высоте окна скорость в пикселях одна
+            // и та же, а колонки с разным числом карточек не «разъезжаются».
+            var speed = FALL_MIN_PX + Math.random() * (FALL_MAX_PX - FALL_MIN_PX);
             var duration = (runway + vh) / speed;
             var phase = Math.random() * duration;
 
@@ -269,8 +296,6 @@
                 var delay = -(i * duration / perColumn + phase);
                 createCard(column, duration, delay);
             }
-
-            currentX += COLUMN_STEP;
         }
     }
 

@@ -26,6 +26,21 @@ const MASK_H     = 512;
 const TARGET_FPS = 30;
 const DPR        = Math.min(window.devicePixelRatio || 1, 1.5);
 
+// Скорость падения дождя задаётся В ПИКСЕЛЯХ НА СЕКУНДУ, а не в клетках на
+// кадр. Причина: раньше скорость была 0.3..0.8 клетки/кадр, и при 30 fps
+// это давало 126..336 px/сек — но ТОЛЬКО если кадров ровно 30. Цикл матрицы
+// ограничен FRAME_INTERVAL, поэтому на экране 50-60 Гц реально выходит
+// около 25 кадров в секунду, и дождь падал заметно медленнее задуманного.
+// Правая полоса (CSS-анимация) от FPS не зависит вообще — из-за этого две
+// полосы расходились по скорости в зависимости от монитора.
+const RAIN_MIN_PX = 126;   // = 9 клеток/сек при CELL_SIZE 14
+const RAIN_MAX_PX = 336;   // = 24 клеток/сек при CELL_SIZE 14
+
+// Максимальный шаг времени за кадр, мс. После возврата на вкладку или при
+// лаге проходит огромный dt, и без ограничения дождь «прыгал» на сотни
+// пикселей за один кадр.
+const MAX_FRAME_MS = 100;
+
 let CELL_SIZE   = 14;
 let COL_SPACING = CELL_SIZE * 0.4;
 
@@ -230,7 +245,7 @@ function resizeCanvas() {
         const phrase = getRandomPhrase();
         rainDrops.push({
             y: Math.random() * (cssH + 500) - 500,
-            speed: 0.3 + Math.random() * 0.5,
+            speed: RAIN_MIN_PX + Math.random() * (RAIN_MAX_PX - RAIN_MIN_PX),
             origChars: phrase.split(''),
             curChars: phrase.split('')
         });
@@ -240,7 +255,10 @@ function resizeCanvas() {
 }
 
 // ─── Отрисовка ─────────────────────────────────────────────────────────────
-function draw() {
+// dtMs — время с прошлого draw() в миллисекундах. Капли сдвигаются на
+// speed * dt, где speed уже в px/сек, поэтому фактическая скорость падения
+// не зависит от того, сколько кадров успела нарисовать машина.
+function draw(dtMs) {
     frame++;
     const t = frame / TARGET_FPS;
 
@@ -330,14 +348,16 @@ if (glyphReady) {
             ctx.fillText(ch, x, y);
         }
 
-        drop.y += drop.speed;
+        // Сдвиг по времени: speed задан в px/сек, dt — доля секунды.
+        drop.y += drop.speed * dtMs / 1000;
 
         if (drop.y > cssH) {
             const newPhrase = getRandomPhrase();
             drop.origChars = newPhrase.split('');
             drop.curChars  = newPhrase.split('');
             drop.y = -(newPhrase.length * CELL_SIZE) - Math.random() * 100;
-            drop.speed = 0.3 + Math.random() * 0.5;
+            drop.speed = RAIN_MIN_PX
+                       + Math.random() * (RAIN_MAX_PX - RAIN_MIN_PX);
         }
     }
 }
@@ -346,9 +366,23 @@ if (glyphReady) {
 const FRAME_INTERVAL = 1000 / TARGET_FPS;
 let lastDraw = 0;
 
+// Видимость матриц теперь решает matrix-layout.js: он меряет реальную
+// ширину свободных полей и вешает на <html> класс no-side-matrix.
+// Раньше здесь стояло жёсткое `window.innerWidth > 1000`, из-за чего дождь
+// выключался на ноутбуках, где поля по 200+px с каждой стороны были.
+function sideSpaceAvailable() {
+    return !document.documentElement.classList.contains('no-side-matrix');
+}
+
 function loop(now) {
-    if (!document.hidden && window.innerWidth > 1000 && now - lastDraw >= FRAME_INTERVAL) {
-        draw();
+    if (!document.hidden && sideSpaceAvailable() &&
+        now - lastDraw >= FRAME_INTERVAL) {
+        // Первый кадр: шага нет, рисуем без сдвига. Дальше dt ограничен
+        // сверху, чтобы после возврата на вкладку дождь не переместился
+        // сразу на сотни пикселей.
+        const dt = lastDraw ? Math.min(now - lastDraw, MAX_FRAME_MS)
+                            : FRAME_INTERVAL;
+        draw(dt);
         lastDraw = now;
     }
     requestAnimationFrame(loop);
@@ -376,3 +410,15 @@ window.addEventListener('resize', function () {
 });
 
 requestAnimationFrame(loop);
+
+// Экспорт состояния дождя — им пользуется audit-matrix-speed.js, который
+// сверяет скорость падения левой и правой полосы между собой. По одной
+// формуле это не проверить: реальный FPS плавает, а значит плавает и
+// фактическая скорость в пикселях на секунду.
+window.__rainState = function () {
+    return {
+        speeds: rainDrops.map(function (d) { return d.speed; }),
+        ys: rainDrops.map(function (d) { return d.y; }),
+        cell: CELL_SIZE, cssH: cssH, cssW: cssW, frame: frame
+    };
+};
